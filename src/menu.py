@@ -1,2 +1,6 @@
 class Menu():
-    pass
+    def __init__():
+        pass
+
+    def parseArg():
+        pass
