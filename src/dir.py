@@ -7,6 +7,18 @@ class Dir():
     def walkDir(self):
         yield walk(self.__path, topdown=True)
 
+    def send():
+        pass
+
+    def receive():
+        pass
+
     @property
-    def get_path(self):
+    def path(self):
         return self._path
+    
+    def _makeDir(self):
+        pass
+
+    def __del__(self):
+        del self.__path
