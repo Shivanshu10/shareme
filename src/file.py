@@ -1,6 +1,9 @@
+import os
+import consts
 class File():
     def __init__(self, path):
         self.__path=path
+        self.__fname=os.path.splitext(self.__path)
         self.__f=None
     
     def _openFile(self, op='rb'):
@@ -15,19 +18,25 @@ class File():
         return self.__f
 
     @property
+    def fname(self):
+        return self.__fname
+
+    @property
     def path(self):
         return self.__path
 
     def send(self, net):
         file=self._openFile()
         while(file):
-            ch=file.read()
-            net.send(ch)
+            ch=file.read(consts.buffer)
+            net.sendall(ch)
+        self._closeFile()
         
     def receive(self, ch):
         file=self._openFile(op='wb')
-        file.write()
+        file.write(ch)
 
     def __del__(self):
         del self.__path
+        del self.__fname
         del self.__f
