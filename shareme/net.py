@@ -1,5 +1,8 @@
-from client import Client
-from server import Server
+from shareme.client import Client
+from shareme.server import Server
+import threading
+import time
+
 
 class Net():
     def __init__(self, client_or_server):
@@ -9,16 +12,15 @@ class Net():
             self.__sock=Client()
         else:
             self.__sock=Server()
+        self.setUp()
 
     def setUp(self):
         if (self.__type):
             self.__sock.receiveBroadcast()
         else:
+            thread_server=threading.Thread(target=self.__sock.threadedServer)
+            thread_server.start()
             self.__sock.sendBroadcast()
-
-    @property
-    def timeout(self):
-        return self.__sock.timeout
 
     @property
     def ip_bind(self):
@@ -37,7 +39,9 @@ class Net():
         return self.__sock.sock
 
     def send(self, ch):
+        print("SENDING: " + str(ch))
         self.__sock.send(ch)
+        time.sleep(1)
 
     def receive(self):
         return self.__sock.receive()
