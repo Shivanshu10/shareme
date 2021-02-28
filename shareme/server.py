@@ -1,4 +1,3 @@
-from os import confstr_names
 import shareme.consts
 import socket
 import time
@@ -37,7 +36,11 @@ class Server():
     def sock(self):
         return self.__s
 
+    def receive(self):
+        return self.__client.recv(shareme.consts.buffer)
+
     def send(self, ch):
+        self.receive()
         self.__client.sendall(ch)
 
     def close(self):

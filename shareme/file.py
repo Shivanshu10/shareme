@@ -38,18 +38,16 @@ class File():
 
     def send(self, net):
         net.send(b"FILE")
-        net.send(b"<SEPRATOR>")
         net.send(bytes(os.path.relpath(self.__path, start=self.__root), 'utf-8'))
-        net.send(b"<SEPRATOR>")
         net.send(bytes(str(self.__size), 'utf-8'))
-        net.send(b"<SEPRATOR>")
         file=File.openFile(self.__path)
-        ch=[1, 2]
-        while(len(ch)!=0):
+        ch="a"
+        while(True):
             ch=file.read(shareme.consts.buffer)
+            if (ch==b''):
+                break
             net.send(ch)
         net.send(b"END")
-        net.send(b"<SEPRATOR>")
         File.closeFile(file)
 
     @staticmethod
@@ -59,6 +57,7 @@ class File():
         while (ch!=b"END"):
             file.write(ch)
             ch=net.receive()
+        print("END FILE")
         File.closeFile(file)
 
     def __del__(self):

@@ -42,8 +42,14 @@ class Client():
         self.__s.connect((addr[0], shareme.consts.service_port))
         print("CONNECT TO SERVER")
 
+    def send(self, ch):
+        self.__s.send(ch)
+
     def receive(self):
-        return self.__s.recv(shareme.consts.buffer)
+        self.send(b"DONE PROCESSING")
+        s=self.__s.recv(shareme.consts.buffer)
+        print(s)
+        return s
 
     @property
     def ip_bind(self):
