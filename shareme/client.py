@@ -43,10 +43,11 @@ class Client():
         print("CONNECT TO SERVER")
 
     def send(self, ch):
-        self.__s.send(ch)
+        self.__s.recv(shareme.consts.buffer)
+        self.__s.sendall(ch)
 
     def receive(self):
-        self.send(b"DONE PROCESSING")
+        self.__s.sendall(b"DONE PROCESSING")
         s=self.__s.recv(shareme.consts.buffer)
         print(s)
         return s

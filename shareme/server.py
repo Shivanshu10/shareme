@@ -1,7 +1,6 @@
 import shareme.consts
 import socket
 import time
-
 class Server():
     def __init__(self):
         self.__client=None
@@ -37,10 +36,13 @@ class Server():
         return self.__s
 
     def receive(self):
-        return self.__client.recv(shareme.consts.buffer)
+        self.__client.sendall(b"DONE PROCESSING")
+        s=self.__client.recv(shareme.consts.buffer)
+        print(s)
+        return s
 
     def send(self, ch):
-        self.receive()
+        self.__client.recv(shareme.consts.uffer)
         self.__client.sendall(ch)
 
     def close(self):
