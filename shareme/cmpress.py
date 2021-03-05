@@ -1,9 +1,10 @@
-class Compress():
-    def __init__():
-        pass
+import zlib
 
-    def compress():
-        pass
+class Compresser():
+    @staticmethod
+    def compress(s, level=4):
+        return zlib.compress(s, level)
 
-    def decompress():
-        pass
+    @staticmethod
+    def decompress(cmpressed_str):
+        return zlib.decompress(cmpressed_str)
