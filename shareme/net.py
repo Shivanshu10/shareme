@@ -1,7 +1,7 @@
 from shareme.client import Client
 from shareme.server import Server
 from shareme.cryp import Crypto
-from sharme.cmpress import Compresser
+from shareme.cmpress import Compresser
 import threading
 import time
 
@@ -17,25 +17,21 @@ class Net():
         self.setUp()
 
     def setUp(self):
-        pubk=self.__cryp.pubm()
+        pubk=self.__cryp.pubm
         if (self.__type):
             self.__sock.receiveBroadcast()
-            otherk=self.receive()
+            otherk=self.receive(encr=False)
             self.__cryp.otherPub(otherk)
-            self.send(pubk)
-            key_encrypted=self.__cryp.encryptKey()
-            self.send(key_encrypted)
+            print(self.__cryp.encodedPub())
+            self.send(self.__cryp.encodedPub(), encr=False)
+
         else:
             thread_server=threading.Thread(target=self.__sock.threadedServer)
             thread_server.start()
             self.__sock.sendBroadcast()
-            self.send(pubk)
-            otherk=self.receive()
+            self.send(self.__cryp.encodedPub(), encr=False)
+            otherk=self.receive(encr=False)
             self.__cryp.otherPub(otherk)
-            key_encrypted=self.__cryp.encryptKey()
-            self.send(key_encrypted)
-            key_encrypted=self.receive()
-            self.__cryp.setKey(self.__cryp.decryptAsym(key_encrypted))
 
     @property
     def ip_bind(self):
@@ -53,13 +49,17 @@ class Net():
     def sock(self):
         return self.__sock.sock
 
-    def send(self, ch):
+    def send(self, ch, encr=True):
         print("SENDING: " + str(ch))
         msg=Compresser.compress(ch)
-        msg=self.__cryp.encryptSym(msg)
+        if (encr):
+            msg=self.__cryp.encryptAsym(msg)
         self.__sock.send(msg)
         time.sleep(1)
 
-    def receive(self):
-        msg=self.__cryp.decryptSym(self.__sock.receive())
+    def receive(self, encr=True):
+        msg=self.__sock.receive()
+        if (encr):
+             msg=self.__cryp.decryptAsym(msg)
+        print(Compresser.decompress(msg))
         return Compresser.decompress(msg)

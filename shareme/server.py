@@ -42,7 +42,7 @@ class Server():
         return s
 
     def send(self, ch):
-        self.__client.recv(shareme.consts.uffer)
+        self.__client.recv(shareme.consts.buffer)
         self.__client.sendall(ch)
 
     def close(self):
