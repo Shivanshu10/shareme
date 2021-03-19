@@ -1,11 +1,13 @@
 import socket
 import shareme.consts
+import sys
 
 class Client():
     def __init__(self):
         self.__createSocketTCP()
         self.__createSocketUDP()
-        self.__setOpts()
+        if (sys.platform != 'win32'):
+            self.__setOpts()
 
     def __setOpts(self):
         self.__s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -32,24 +34,24 @@ class Client():
         while(True):
             data, addr = self.__broad.recvfrom(1024)
             if (data==b"Hello lets share!!"):
-                print("RECEIVED BROADCAST")
-                print(addr)
+                # print("RECEIVED BROADCAST")
+                # print(addr)
                 self.__ip_bind=addr[0]
                 self.__port_bind=shareme.consts.service_port
                 self._closeUDP()
                 del self.__broad
                 break
         self.__s.connect((addr[0], shareme.consts.service_port))
-        print("CONNECT TO SERVER")
+        # print("CONNECT TO SERVER")
 
     def send(self, ch):
         self.__s.recv(shareme.consts.buffer)
         self.__s.sendall(ch)
 
-    def receive(self):
+    def receive(self, buffer=shareme.consts.buffer):
         self.__s.sendall(b"DONE PROCESSING")
-        s=self.__s.recv(shareme.consts.buffer)
-        print(s)
+        s=self.__s.recv(buffer)
+        # print(s)
         return s
 
     @property

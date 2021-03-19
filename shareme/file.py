@@ -57,7 +57,6 @@ class File():
         while (ch!=b"END"):
             file.write(ch)
             ch=net.receive()
-        print("END FILE")
         File.closeFile(file)
 
     def __del__(self):

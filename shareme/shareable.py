@@ -48,16 +48,11 @@ class Shareable():
         while (True):
             received_data=self.__net.receive()
             if (received_data==b"FILE"):
-                print("RECEIVED FILE")
                 path=self.__net.receive().decode('utf-8')
-                print("PATH: " + path)
                 size=self.__net.receive().decode('utf-8')
-                print("SIZE: " + size)
                 File.receive(self.__net, path)
             elif (received_data==b"DIR"):
-                print("RECEIVED DIR")
                 Dir.receive(self.__net)
             elif (received_data==b'FINISH'):
-                print("FINISH")
                 self.__net.send(b"OK FINISH")
                 break
